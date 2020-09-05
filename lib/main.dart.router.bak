@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+import 'package:learn_flutter/pages/detail.dart';
+import 'package:learn_flutter/pages/unknow.dart';
+
+void main(List<String> args) {
+  runApp(MyApp());
+}
+
+class Person {
+  String name;
+  int age;
+  Person({this.name, this.age});
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      routes: {
+        Home.routerName: (ctx) => Home(),
+        DetailPage.routerName: (ctx) => DetailPage('haha'),
+      },
+      initialRoute: Home.routerName,
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(builder: (ctx) {
+          return UnKnow();
+        });
+        
+      },
+      // home: Home(),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  static const String routerName = '/';
+
+  const Home({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('test'),
+      ),
+      body: MyContent(),
+    );
+  }
+}
+
+class MyContent extends StatefulWidget {
+  MyContent({Key key}) : super(key: key);
+
+  @override
+  _MyContentState createState() => _MyContentState();
+}
+
+class _MyContentState extends State<MyContent> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        RaisedButton(
+          onPressed: () => Jump(context),
+          child: Text('提拉打开肌肤'),
+        ),
+        RaisedButton(
+          onPressed: () => JumpDetail(context),
+          child: Text('提拉打开肌肤'),
+        ),
+        RaisedButton(
+          onPressed: () => JumpDetail2(context),
+          child: Text('提拉打开肌肤3333'),
+        ),
+      ],
+    );
+  }
+
+  void Jump(BuildContext context) {
+    Future result =
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+      return DetailPage('hello world');
+    }));
+    result.then((res) {
+      print(res);
+    });
+  }
+
+  void JumpDetail(BuildContext ctx) {
+    Navigator.of(ctx)
+        .pushNamed(DetailPage.routerName, arguments: "{name:'123',age:12}");
+  }
+   void JumpDetail2(BuildContext ctx) {
+    Navigator.of(ctx)
+        .pushNamed('/amdfsdafasdf', arguments: "{name:'123',age:12}");
+  }
+}

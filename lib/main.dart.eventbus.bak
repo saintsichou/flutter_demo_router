@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+import 'package:event_bus/event_bus.dart';
+
+final EventBus eventBus = EventBus();
+void main(List<String> args) {
+  runApp(Myapp());
+}
+
+class Person {
+  String name;
+  int age;
+  String sexy;
+  Person({this.name, this.age, this.sexy});
+}
+
+class Myapp extends StatelessWidget {
+  const Myapp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('data'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[Btn(), Btext()],
+        ));
+  }
+}
+
+class Btn extends StatelessWidget {
+  const Btn({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      onPressed: () {
+        eventBus.fire(Person(name: 'lee', age: 18, sexy: 'male'));
+      },
+      child: Text('data'),
+    );
+  }
+}
+
+class Btext extends StatefulWidget {
+  Btext({Key key}) : super(key: key);
+
+  @override
+  _BtextState createState() => _BtextState();
+}
+
+class _BtextState extends State<Btext> {
+  String msg = 'hello，藏之';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    eventBus.on<Person>().listen((res) {
+      print(res.name);
+      setState(() {
+        msg = res.name;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text(this.msg),
+    );
+  }
+}
+
+class TapEvent extends StatelessWidget {
+  const TapEvent({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: GestureDetector(
+      onTap: () {
+        print('object');
+      },
+      onTapDown: (e) {
+        print(e.globalPosition);
+      },
+      onLongPress: () {
+        print('changan');
+      },
+      child: Container(
+        width: 300,
+        height: 300,
+        color: Colors.blue,
+      ),
+    ));
+  }
+}

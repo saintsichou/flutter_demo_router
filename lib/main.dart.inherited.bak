@@ -1,0 +1,98 @@
+import 'package:flutter/material.dart';
+
+main() => (runApp(MyApp()));
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  int _count = 99;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('shopping'),
+      ),
+      body: MyDadWidget(
+        count: _count,
+        child: Column(
+          children: <Widget>[MyShow1(), MyShow2()],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            this._count++;
+          });
+        },
+        child: Icon(Icons.redo),
+      ),
+    );
+  }
+}
+
+class MyDadWidget extends InheritedWidget {
+  final int count;
+  MyDadWidget({this.count, child}) : super(child: child);
+  static MyDadWidget of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType();
+  }
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) {
+    // TODO: implement updateShouldNotify
+    return true;
+  }
+}
+
+class MyShow1 extends StatelessWidget {
+  const MyShow1({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    int count = MyDadWidget.of(context).count;
+
+    return Container(
+      child: Text('sfadfsadf------->$count'),
+    );
+  }
+}
+
+class MyShow2 extends StatefulWidget {
+  @override
+  _MyShow2State createState() => _MyShow2State();
+}
+
+class _MyShow2State extends State<MyShow2> {
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print('回调了');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int count = MyDadWidget.of(context).count;
+
+    return Card(
+      child: Text('当前count$count'),
+      color: Colors.blue,
+    );
+  }
+}

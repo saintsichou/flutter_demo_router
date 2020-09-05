@@ -1,0 +1,239 @@
+/*
+ * @Date: 2020-07-23 10:45:04
+ * @LastEditors: Lee
+ * @LastEditTime: 2020-08-03 15:22:25
+ */
+
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+
+main()=>(runApp(MyApp()));
+
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+       home: Home(),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('shopping'),
+      ),
+      body:  Demo2(),
+    );
+  }
+}
+
+//两种监听方式
+//control
+//notification
+//滚动监听组件
+class Demo2 extends StatefulWidget {
+  Demo2({Key key}) : super(key: key);
+
+  @override
+  _Demo2State createState() => _Demo2State();
+}
+
+class _Demo2State extends State<Demo2> {
+  ScrollController controll = ScrollController(initialScrollOffset: 300);
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controll.addListener((){
+      print('我监听${controll.offset}');
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener(
+      onNotification: (ScrollNotification notification){
+        if(notification is ScrollStartNotification){
+          print('start scroll');
+        }else if(notification is ScrollUpdateNotification){
+          print('${notification.metrics.maxScrollExtent}------${notification.metrics.pixels}');
+        }else if(notification is ScrollEndNotification){
+          print('end');
+        }
+        return true;
+      },
+      child: ListView.builder(
+      controller: controll,
+      itemBuilder: (BuildContext ctx,int index){
+        return ListTile(
+          leading: Icon(Icons.favorite,color:Colors.red),
+          title: Text('风云榜$index'),
+        );
+      },
+      itemCount: 100,
+    ),
+    );
+  }
+}
+
+//三个silver滚动组件
+// class Demo1 extends StatelessWidget {
+//   const Demo1({Key key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return CustomScrollView(
+//       slivers: <Widget>[
+//         SliverAppBar(
+//           expandedHeight: 300,
+//           flexibleSpace: FlexibleSpaceBar(
+//             title: Text('hello world'),
+//             background: Image.asset('assets/imgs/go.png',fit: BoxFit.cover,),
+//           ),
+//           pinned: true,
+//         ),
+//         SliverGrid(
+//           delegate: SliverChildBuilderDelegate(
+//             (BuildContext ctx,int index){
+//               return Container(color:Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), .6));
+//             },
+//             childCount: 30
+//           ), 
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 3,
+//             mainAxisSpacing: 3,
+//             crossAxisSpacing: 3,
+//             childAspectRatio: 1.5
+//           ),
+//         ),
+//         SliverList(delegate: SliverChildBuilderDelegate((BuildContext ctx,int index){
+//             return ListTile(
+//               leading: Icon(Icons.favorite,color: Colors.red,),
+//               title: Text('排行榜'),
+//               subtitle: Text('$index'),
+//             );
+//         },
+//         childCount: 20
+//         )),
+//       ],
+//     );
+//   }
+// }
+
+// class ListS extends StatelessWidget {
+//   const ListS({Key key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return CustomScrollView(
+//       slivers: <Widget>[
+//         SliverSafeArea(
+//           sliver:SliverPadding(
+//             padding: EdgeInsets.all(8),
+//             sliver: SliverGrid(delegate: SliverChildBuilderDelegate(
+//               (BuildContext ctx,int index){
+//                 return Container(color:Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), .6));
+//               },
+//               childCount: 32
+//             ),
+//               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//               crossAxisCount: 3,
+//               crossAxisSpacing: 8,
+//               mainAxisSpacing: 8,
+//               childAspectRatio: 1/2
+//             ))
+//           )
+//         )
+//       ],
+//     );
+//   }
+// }
+// class ListB extends StatelessWidget {
+//   const ListB({Key key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 16/9,crossAxisSpacing: 5,mainAxisSpacing: 5), itemBuilder: (BuildContext ctx,int index){
+//       return Container(color:Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), .6));
+//     });
+//   }
+// }
+
+// class ListG extends StatelessWidget {
+//   const ListG({Key key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return GridView(
+//       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 16/9,crossAxisSpacing: 5,mainAxisSpacing: 5),
+//       children: List.generate(100, (index){
+//         return Container(color:Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), .6));
+//       }),
+//       );
+//   }
+// }
+//listview separated
+
+// class List3 extends StatelessWidget {
+//   const List3({Key key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.separated(
+//       itemBuilder:  (BuildContext ctx,int index){
+//         return Text('$index',style: TextStyle(fontSize:30),);
+//       },
+//       separatorBuilder:  (BuildContext ctx,int index){
+//         return Divider(color: Colors.blue,thickness: 10,indent: 10,);
+//       }, 
+//       itemCount: 100
+//     );
+//   }
+// }
+
+
+
+//大量数据列表 listview builder
+
+// class List2 extends StatelessWidget {
+//   const List2({Key key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//       itemCount: 100,
+//       itemBuilder: (BuildContext ctx,int index){
+//         return Text('$index',style: TextStyle(fontSize:30),);
+//       }
+//     );
+//   }
+// }
+
+//listview1  小量数据
+// class Content extends StatelessWidget {
+//   const Content({Key key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView(
+//       // scrollDirection: Axis.horizontal,
+//       // itemExtent: 100,
+//       children: List.generate(100, (index){
+//         return ListTile(
+//           leading: Icon(Icons.favorite),
+//           trailing: Icon(Icons.delete),
+//           title: Text('hhhhhh'),
+//           subtitle: Text('$index'),
+//         );
+//       })
+//     );
+//   }
+// }
+

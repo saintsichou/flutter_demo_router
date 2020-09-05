@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:provider/single_child_widget.dart';
+
+void main(List<String> args) {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  //1.创建animation wiht singleTickerProvederstatemixin
+  AnimationController _controller;
+  Animation animation;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: 1),
+        lowerBound: 0,
+        upperBound: 1);
+
+    //2.设置curv的值
+
+    animation = CurvedAnimation(parent: _controller, curve: Curves.bounceInOut);
+    //3.tween
+    animation = Tween(begin: 50.0, end: 150.0).animate(animation);
+    //4.监听刷新页面动漫,监听值的改变
+    //_controller.addListener(() {
+    //  setState(() {});
+    //});
+    //5.监听动画状态
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('data'),
+      ),
+      body: Center(
+          child: AnimatedBuilder(
+              animation: _controller,
+              builder: (ctx, child) {
+                return Icon(Icons.favorite,
+                    color: Colors.red, size: animation.value);
+              })),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (_controller.isAnimating) {
+            _controller.stop();
+          } else {
+            _controller.forward();
+          }
+        },
+        child: Icon(Icons.ac_unit),
+      ),
+    );
+  }
+}

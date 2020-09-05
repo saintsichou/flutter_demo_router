@@ -1,0 +1,161 @@
+/*
+ * @Date: 2020-07-23 10:45:04
+ * @LastEditors: Lee
+ * @LastEditTime: 2020-08-03 15:22:25
+ */
+
+import 'package:flutter/material.dart';
+
+main()=>(runApp(MyApp()));
+
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+       home: Home(),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('shopping'),
+      ),
+      body: Demo1(),
+    );
+  }
+}
+//row column
+class Content extends StatelessWidget {
+  const Content({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      // textDirection:TextDirection.rtl,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        Container(width:30,height:30,color:Colors.red,child:Text('ho')),
+        Container(width:100,height:90,color:Colors.blue,child:Text('ho2')),
+        Container(width:200,height:120,color:Colors.yellow,child:Text('ho3')),
+      ],
+    );
+  }
+}
+
+//expanded
+class Content2 extends StatelessWidget {
+  const Content2({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        Expanded(flex:1,child: Container(width:30,height:30,color:Colors.red,child:Text('ho'))),
+        Expanded(flex:1,child:Container(width:100,height:90,color:Colors.blue,child:Text('ho2'))),
+        Expanded(child:Container(width:200,height:120,color:Colors.yellow,child:Text('ho3'))),
+      ],
+    );
+  }
+}
+
+class Content3 extends StatelessWidget {
+  const Content3({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.bottomEnd,
+      fit: StackFit.expand,
+      children: <Widget>[
+      Container(width: 150,height: 150,color: Colors.red,),
+      Image.asset('assets/imgs/go.png',fit:BoxFit.cover),
+      Positioned(right:0,child: Text('丰田亚洲龙',style: TextStyle(color:Colors.blue),))
+    ],);
+  }
+}
+
+class Content4 extends StatelessWidget {
+  const Content4({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Image.asset('assets/imgs/go.png'),
+        Positioned(
+          bottom:0,
+          left:0,
+          right:0,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            color: Color.fromRGBO(0, 0, 0, 0.6),
+            child:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                 Text('丰田亚洲龙',
+                  style: TextStyle(fontSize:18,color: Colors.white),
+                  textAlign:TextAlign.left,
+                  ),
+                  GestureDetector(child:Icon(Icons.favorite,color:Colors.white),onTap: ()=>print('click'),)
+              ],
+            )
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class Demo1 extends StatefulWidget {
+  Demo1({Key key}) : super(key: key);
+  @override
+  _Demo1State createState() => _Demo1State();
+}
+
+class _Demo1State extends State<Demo1> {
+  bool flag = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Image.asset('assets/imgs/go.png'),
+        Positioned(
+          bottom:0,
+          left:0,
+          right:0,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            color: Color.fromRGBO(0, 0, 0, 0.6),
+            child:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                 Text('丰田亚洲龙',
+                  style: TextStyle(fontSize:18,color: Colors.white),
+                  textAlign:TextAlign.left,
+                  ),
+                  GestureDetector(child:Icon(Icons.favorite,color:flag?Colors.white:Colors.red),onTap: ()=>{
+                    setState((){
+                      flag = !flag;
+                    })
+                  },)
+              ],
+            )
+          ),
+        )
+      ],
+    );
+  }
+}

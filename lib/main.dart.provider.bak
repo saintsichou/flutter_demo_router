@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:learn_flutter/provider/count_view.dart';
+import 'package:learn_flutter/provider/user.dart';
+import 'package:learn_flutter/provider/user_view.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (ctx) => MyCount(),
+      ),
+      ChangeNotifierProvider(
+          create: (ctx) => User(UserInfo(name: 'lee', age: 20, sexy: 'male')))
+    ],
+    child: MyApp(),
+  ));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Home(),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  const Home({Key key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('shopping'),
+        ),
+        body: Column(
+          children: <Widget>[MyShow1(), Myshow2(), Myshow3()],
+        ),
+        floatingActionButton: Consumer<MyCount>(
+          builder: (ctx, counterVm, child) {
+            return FloatingActionButton(
+              onPressed: () {
+                counterVm.counter++;
+              },
+              child: child,
+            );
+          },
+          child: Icon(Icons.ac_unit),
+        ));
+  }
+}
+
+class MyShow1 extends StatelessWidget {
+  const MyShow1({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('sfadfsadf------->1000'),
+      color: Colors.orange,
+    );
+  }
+}
+
+class Myshow2 extends StatelessWidget {
+  const Myshow2({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Card(
+        color: Colors.blue,
+        // child: Text('data'),
+        child: Consumer<MyCount>(builder: (ctx, counterVm, child) {
+          return Text('${counterVm.counter}');
+        }),
+      ),
+    );
+  }
+}
+
+class Myshow3 extends StatelessWidget {
+  const Myshow3({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Consumer<User>(builder: (ctx, userVm, child) {
+        return Text('${userVm.user.name},${userVm.user.age}');
+      }),
+    );
+  }
+}
